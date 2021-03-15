@@ -3,6 +3,7 @@ const header = document.querySelector("header.main-navigation")
 const containerHomeDiv = document.querySelector(".home")
 const footer = document.querySelector("footer")
 let counter = 0
+let dragged
 
 function eventOne(event){
     if(this.textContent === "Home"){
@@ -76,7 +77,26 @@ function eventNine(event){
 
 function eventTen(event){
     event.preventDefault()
-    console.log("dragging")
+}
+
+function eventEleven(event){
+    if(event.target === containerHomeDiv.querySelector("header p")){
+        containerHomeDiv.querySelector("header p").style.background = "purple"
+    }
+}
+
+function eventTwelve(event){
+    if(event.target === containerHomeDiv.querySelector("header p")){
+        containerHomeDiv.querySelector("header p").style.background = ""
+    }
+}
+
+function eventThirteen(event){
+    event.preventDefault()
+    if(event.target === containerHomeDiv.querySelector("header p")){
+        event.target.style.background = ""
+        this.body.children[1].children[0].append(this.body.children[1].children[0].children[0])
+    }
 }
 
 header.querySelectorAll(".nav-link").forEach(i => {
@@ -92,9 +112,15 @@ document.addEventListener("scroll",eventSeven)
 window.addEventListener("select",eventEight)
 header.querySelector(".logo-heading").addEventListener("dblclick",eventNine)
 document.addEventListener("drag",eventTen)
+document.addEventListener("dragstart",(event) => {dragged = event.target; event.target.style.opacity = 0.5})
+document.addEventListener("dragend",(event) => {event.target.style.opacity = ""})
+document.addEventListener("dragover",(event) => {event.preventDefault()})
+document.addEventListener("dragenter",eventEleven)
+document.addEventListener("dragleave",eventTwelve)
+document.addEventListener("drop",eventThirteen)
 
 //Here is event five
-containerHomeDiv.querySelectorAll(".btn").forEach(i => i.addEventListener("click",(event) => {
+containerHomeDiv.querySelector(".btn").addEventListener("click",(event) => {
     let focusInput = document.createElement("input")
     let descr = document.createElement("p")
     descr.innerText = "Select text from inside the box to read inside console"
@@ -103,13 +129,13 @@ containerHomeDiv.querySelectorAll(".btn").forEach(i => i.addEventListener("click
     focusInput.setAttribute("style","height: auto; width: 1240px; background: salmon;")
     focusInput.value = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters"
     focusInput.addEventListener("focus",eventFive)
-    if(i.parentElement.querySelector("input") === null){
-        i.parentElement.append(descr)
-        i.parentElement.append(focusInput)
+    if(containerHomeDiv.querySelector(".btn").parentElement.querySelector("input") === null){
+        containerHomeDiv.querySelector(".btn").parentElement.append(descr)
+        containerHomeDiv.querySelector(".btn").parentElement.append(focusInput)
     }else{
-        i.parentElement.querySelector("p").nextElementSibling.nextElementSibling.remove()
-        i.parentElement.querySelector("input").remove()
+        containerHomeDiv.querySelector(".btn").parentElement.querySelector("p").nextElementSibling.nextElementSibling.remove()
+        containerHomeDiv.querySelector(".btn").parentElement.querySelector("input").remove()
     }
     event.stopPropagation()
-}))
+})
 //event five
